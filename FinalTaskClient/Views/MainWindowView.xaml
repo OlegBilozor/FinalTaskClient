@@ -12,7 +12,11 @@
         <model:PersonContactCollectionToFirstPhoneConverter x:Key="PersonContactCollectionToFirstPhone"/>
         <model:CountryCodeToNameConverter x:Key="CountryCodeToNameConverter"/>
     </Window.Resources>
-    <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <DockPanel>
             <TextBlock Margin="5 5 0 0" FontWeight="Bold" DockPanel.Dock="Left" Text="Customers" FontSize="20"/>
             <ToolBar Padding="3" DockPanel.Dock="Right">
@@ -34,33 +38,56 @@
                     <ComboBoxItem Content="English" />
                 </ComboBox>
             </StackPanel>
-            <TextBlock></TextBlock>
+            <Button Margin="8" Content="Prev page" Command="{Binding PrevPageCommand}"/>
+            <Button Margin="8" Content="Next page" Command="{Binding NextPageCommand}"/>
+            <TextBlock/>
         </DockPanel>
-        <DataGrid Margin="5" Name="DtGrPerson" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                  IsReadOnly="True" ItemsSource="{Binding Client.Persons}">
-            <DataGridTextColumn Header="Address No" Binding="{Binding Id}"/>
-            <DataGridTextColumn Header="Company" Binding="{Binding Cpny}"/>
-            <DataGridTextColumn Header="Greeting" CellStyle="{DynamicResource GreetingColumnStyle}"/>
-            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
-            <DataGridTextColumn Header="Last Name" Binding="{Binding Lname}"/>
-            <DataGridTextColumn Header="First Name" Binding="{Binding Fname}"/>
-            <DataGridTextColumn Header="Street" Binding="{Binding Street}"/>
-            <DataGridTextColumn Header="Country">
-                <DataGridTextColumn.Binding>
-                    <MultiBinding Converter="{StaticResource CountryCodeToNameConverter}">
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}" Path="Item.CountryCodeNavigation.Code"/>
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="LanguageId"/>
-                    </MultiBinding>
-                </DataGridTextColumn.Binding>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="Postal Code" Binding="{Binding Zip}"/>
-            <DataGridTextColumn Header="City" Binding="{Binding City}"/>
-            <DataGridTextColumn Header="Phone" Binding="{Binding PersonContact, Converter={StaticResource PersonContactCollectionToFirstPhone}}"/>
-            <DataGridTextColumn Header="Date of Birth" Binding="{Binding DateOfBirth, Converter={StaticResource DateToStringConverter}}"/>
-            <DataGridTextColumn Header="Registration" Binding="{Binding FirstContact, Converter={StaticResource DateToStringConverter}}"/>
+        
+            <DataGrid Grid.Row="1" Margin="5" Name="DtGrPerson" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  IsReadOnly="True" ItemsSource="{Binding Persons, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                  >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Address No" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Company" Binding="{Binding Cpny}"/>
+                <DataGridTemplateColumn Header="Greeting" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{DynamicResource GreetingColumnStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+                    <DataGridTextColumn Header="Last Name" Binding="{Binding Lname}"/>
+                    <DataGridTextColumn Header="First Name" Binding="{Binding Fname}"/>
+                    <DataGridTextColumn Header="Street" Binding="{Binding Street}"/>
+                    <DataGridTemplateColumn Header="Country">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource CountryCodeToNameConverter}">
+                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}" Path="Item.CountryCode"/>
+                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="LanguageId"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+
+                                </TextBlock>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Postal Code" Binding="{Binding Zip}"/>
+                    <DataGridTextColumn Header="City" Binding="{Binding City}"/>
+                    <DataGridTextColumn Header="Phone" Binding="{Binding PersonContact, Converter={StaticResource PersonContactCollectionToFirstPhone}}"/>
+                    <DataGridTextColumn Header="Date of Birth" Binding="{Binding DateOfBirth, Converter={StaticResource DateToStringConverter}}"/>
+                    <DataGridTextColumn Header="Registration" Binding="{Binding FirstContact, Converter={StaticResource DateToStringConverter}}"/>
+                </DataGrid.Columns>
 
 
+            </DataGrid>
+            
+       
 
-        </DataGrid>
-    </StackPanel>
+    </Grid>
 </Window>

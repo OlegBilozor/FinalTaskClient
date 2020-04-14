@@ -16,8 +16,8 @@
         <TextBlock Margin="5 0 0 5" Text="Contact value:"/>
         <TextBox Margin="5 0 0 5" Text="{Binding Txt}"></TextBox>
         <DockPanel>
-            <Button Margin="10" FontSize="16" FontWeight="DemiBold"  DockPanel.Dock="Left" Content="Save" Command="{Binding SaveChanges}"/>
-            <Button Margin="10" FontSize="16" FontWeight="DemiBold"  DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Cancel" Command="{Binding CancelChanges}"/>
+            <Button Margin="10" FontSize="16" FontWeight="DemiBold"  DockPanel.Dock="Left" Content="Save" Command="{Binding SaveChangesCommand}"/>
+            <Button Margin="10" FontSize="16" FontWeight="DemiBold"  DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Cancel" Command="{Binding CancelChangesCommand}"/>
         </DockPanel>
     </StackPanel>
 </Window>

@@ -24,7 +24,15 @@ namespace FinalTaskClient.Views
         public NewEditContactWindowView(PersonContact contact)
         {
             InitializeComponent();
-            DataContext = new NewEditContactWindowViewModel(contact);
+            var viewModel = new NewEditContactWindowViewModel(contact);
+            viewModel.CancelChangesCommand.RequestCommand += Close;
+            viewModel.SaveChangesCommand.RequestCommand += CloseCommandOnRequestCommand;
+            DataContext = viewModel;
+        }
+        private void CloseCommandOnRequestCommand()
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }

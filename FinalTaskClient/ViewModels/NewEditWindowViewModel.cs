@@ -29,8 +29,14 @@ namespace FinalTaskClient.ViewModels
         }
         public Person PersonToWorkWith { get; set; }
         public int LanguageId { get; set; } = 0;
-        public DelegateCommand SaveChanges { get; set; }
-        public DelegateCommand CancelChanges { get; set; }
+        /// <summary>
+        /// OK
+        /// </summary>
+        public DelegateCommand SaveChangesCommand { get; set; }
+        /// <summary>
+        /// Cancel
+        /// </summary>
+        public DelegateCommand CancelChangesCommand { get; set; }
         public DelegateCommand NewContactCommand { get; set; }
         public DelegateCommand EditContactCommand { get; set; }
         public DelegateCommand DeleteContactCommand { get; set; }
@@ -38,8 +44,8 @@ namespace FinalTaskClient.ViewModels
         public NewEditWindowViewModel(Person person)
         {
             PersonToWorkWith = person;
-            SaveChanges=new DelegateCommand(p=>{ });
-            CancelChanges=new DelegateCommand(p=>{ });
+            SaveChangesCommand=new DelegateCommand(p=>{ });
+            CancelChangesCommand=new DelegateCommand(p=>{ });
             NewContactCommand = new DelegateCommand(OnNewContact);
             EditContactCommand = new DelegateCommand(OnEditContact, CanEditContact);
             DeleteContactCommand = new DelegateCommand(OnDeleteContact, CanDeleteContact);
@@ -72,7 +78,7 @@ namespace FinalTaskClient.ViewModels
         private bool CanEditContact(object obj)
         {
             if (!(obj is DataGrid dtGr)) return false;
-            return dtGr.SelectedCells.Count == 1;
+            return dtGr.SelectedCells.Count/2 == 1;
         }
 
         private async void OnEditContact(object obj)

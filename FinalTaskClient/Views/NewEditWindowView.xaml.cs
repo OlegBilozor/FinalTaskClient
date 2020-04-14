@@ -24,7 +24,15 @@ namespace FinalTaskClient.Views
         public NewEditWindowView(Person person)
         {
             InitializeComponent();
-            DataContext = new NewEditWindowViewModel(person);
+            var viewModel=new NewEditWindowViewModel(person);
+            viewModel.CancelChangesCommand.RequestCommand += Close;
+            viewModel.SaveChangesCommand.RequestCommand += CloseCommandOnRequestCommand;
+            DataContext = viewModel;
+        }
+        private void CloseCommandOnRequestCommand()
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,10 @@ namespace FinalTaskClient.ViewModels
 {
     class MainWindowViewModel : BaseViewModel
     {
-        public List<Person> Persons { get=>ClientWorker.Persons; set{} }
+        public ObservableCollection<Person> Persons { get; set; }
+        
         private int _languageId = 0;
+        private int _pageIndex = 0;
 
         public int LanguageId
         {
@@ -56,38 +59,88 @@ namespace FinalTaskClient.ViewModels
                     }
                 }
             }
-        } 
+        }
+
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set { _pageIndex = value; }
+        }
 
         
         public DelegateCommand NewPersonCommand { get; set; }
         public DelegateCommand EditPersonCommand { get; set; }
         public DelegateCommand DeletePersonCommand { get; set; }
         public DelegateCommand UpdateCommand { get; set; }
+        public DelegateCommand NextPageCommand { get; set; }
+        public DelegateCommand PrevPageCommand { get; set; }
+
+
+        
 
 
         public MainWindowViewModel()
         {
+            
+
             ClientWorker.LoadCountries();
             ClientWorker.LoadGreetings();
             ClientWorker.LoadPersons();
             ClientWorker.LoadPersonContacts();
-            
+            Persons = new ObservableCollection<Person>();
             NewPersonCommand=new DelegateCommand(OnNewPerson);
             EditPersonCommand=new DelegateCommand(OnEditPerson, CanEditPerson);
             DeletePersonCommand = new DelegateCommand(OnDeletePerson, CanDeletePerson);
             UpdateCommand=new DelegateCommand(OnUpdate);
+            NextPageCommand = new DelegateCommand(OnNextPage);
+            PrevPageCommand = new DelegateCommand(OnPrevCommand);
+            
 
         }
+
+        private void OnPrevCommand(object obj)
+        {
+            if (_pageIndex - 1 >= 0)
+            {
+                _pageIndex--;
+                LoadPersons();
+            }
+        }
+
+        private void OnNextPage(object obj)
+        {
+            int pages = ClientWorker.Persons.Count / 100;
+            if (ClientWorker.Persons.Count % 100 != 0) pages++;
+            if (_pageIndex + 1 <= pages)
+            {
+                _pageIndex++;
+                LoadPersons();
+            }
+        }
+
+        private void LoadPersons()
+        {
+            
+            Persons.Clear();
+            for (int i = _pageIndex * 100; i < (_pageIndex + 1) * 100; i++)
+            {
+                if(i>=ClientWorker.Persons.Count) break;
+                Persons.Add(ClientWorker.Persons[i]);
+            }
+
+        }
+        
 
         private void OnUpdate(object obj)
         {
             ClientWorker.LoadPersons();
+            LoadPersons();
         }
 
         private bool CanDeletePerson(object obj)
         {
             if (!(obj is DataGrid dtGr)) return false;
-            return dtGr.SelectedCells.Count > 1;
+            return dtGr.SelectedCells.Count > 0;
         }
 
         private async void OnDeletePerson(object obj)
@@ -111,7 +164,7 @@ namespace FinalTaskClient.ViewModels
         private bool CanEditPerson(object obj)
         {
             if (!(obj is DataGrid dtGr)) return false;
-            return dtGr.SelectedCells.Count == 1;
+            return dtGr.SelectedCells.Count/13 == 1;
         }
 
         private async void OnEditPerson(object obj)

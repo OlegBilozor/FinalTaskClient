@@ -16,10 +16,12 @@ namespace FinalTaskClient.Models
         public  static List<Greeting> Greetings { get; set; }
         public static List<PersonContact> PersonContacts { get; set; }
 
+        
+
         public static async void LoadPersons()
         {
            
-            HttpResponseMessage response = await _client.GetAsync("http://localhost:44393/api/person");
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:5001/api/person");
             if (response.IsSuccessStatusCode)
             {
                 Persons = await response.Content.ReadAsAsync<List<Person>>();
@@ -30,7 +32,7 @@ namespace FinalTaskClient.Models
         public static async void LoadCountries()
         {
             
-            HttpResponseMessage response = await _client.GetAsync("http://localhost:44393/api/country");
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:5001/api/country");
             if (response.IsSuccessStatusCode)
             {
                 Countries = await response.Content.ReadAsAsync<List<Country>>();
@@ -41,7 +43,7 @@ namespace FinalTaskClient.Models
         public static async void LoadGreetings()
         {
             
-            HttpResponseMessage response = await _client.GetAsync("http://localhost:44393/api/greeting");
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:5001/api/greeting");
             if (response.IsSuccessStatusCode)
             {
                 Greetings = await response.Content.ReadAsAsync<List<Greeting>>();
@@ -52,7 +54,7 @@ namespace FinalTaskClient.Models
         public static async void LoadPersonContacts()
         {
             
-            HttpResponseMessage response = await _client.GetAsync("http://localhost:44393/api/personContact");
+            HttpResponseMessage response = await _client.GetAsync("https://localhost:5001/api/personContact");
             if (response.IsSuccessStatusCode)
             {
                 PersonContacts = await response.Content.ReadAsAsync<List<PersonContact>>();
@@ -63,7 +65,7 @@ namespace FinalTaskClient.Models
         public static async Task<List<PersonContact>> LoadPersonContacts(int personId)
         {
             List<PersonContact> contacts = null;
-            HttpResponseMessage response = await _client.GetAsync($"http://localhost:44393/api/personContact/{personId}");
+            HttpResponseMessage response = await _client.GetAsync($"https://localhost:5001/api/personContact/{personId}");
             if (response.IsSuccessStatusCode)
             {
                 contacts = await response.Content.ReadAsAsync<List<PersonContact>>();
@@ -75,7 +77,7 @@ namespace FinalTaskClient.Models
         public static async Task<bool> AddPerson(Person person)
         {
 
-            HttpResponseMessage response = await _client.PostAsJsonAsync("http://localhost:44393/api/person", person);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("https://localhost:5001/api/person", person);
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -86,7 +88,7 @@ namespace FinalTaskClient.Models
         public static async Task<bool> AddPersonContact(PersonContact contact)
         {
 
-            HttpResponseMessage response = await _client.PostAsJsonAsync("http://localhost:44393/api/personContact", contact);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("https://localhost:5001/api/personContact", contact);
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -97,7 +99,7 @@ namespace FinalTaskClient.Models
 
         public static async Task<bool> DeletePerson(Person person)
         {
-            HttpResponseMessage response = await _client.DeleteAsync($"http://localhost:44393/api/person/{person.Id}" );
+            HttpResponseMessage response = await _client.DeleteAsync($"https://localhost:5001/api/person/{person.Id}" );
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -107,7 +109,7 @@ namespace FinalTaskClient.Models
         }
         public static async Task<bool> DeletePersonContact(PersonContact contact)
         {
-            HttpResponseMessage response = await _client.DeleteAsync($"http://localhost:44393/api/person/{contact.PersonContactId}");
+            HttpResponseMessage response = await _client.DeleteAsync($"https://localhost:5001/api/person/{contact.PersonContactId}");
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -118,7 +120,7 @@ namespace FinalTaskClient.Models
 
         public static async Task<bool> UpdatePerson(Person person)
         {
-            HttpResponseMessage response = await _client.PutAsJsonAsync($"http://localhost:44393/api/person/{person.Id}", person);
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"https://localhost:5001/api/person/{person.Id}", person);
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -128,7 +130,7 @@ namespace FinalTaskClient.Models
         }
         public static async Task<bool> UpdatePersonContact(PersonContact contact)
         {
-            HttpResponseMessage response = await _client.PutAsJsonAsync($"http://localhost:44393/api/person/{contact.PersonContactId}", contact);
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"https://localhost:5001/api/person/{contact.PersonContactId}", contact);
             if (response.IsSuccessStatusCode)
             {
                 return true;
